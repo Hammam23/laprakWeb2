@@ -1,0 +1,367 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>LAPORAN PRAKTIKUM</title>
+  <style>
+    :root{
+      --bg:#f7f7f9;
+      --card:#ffffff;
+      --text:#222;
+      --muted:#555;
+      --accent:#0b6efd;
+      --gap:1rem;
+      --radius:12px;
+      --transition:250ms ease;
+      --font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      --font-size-base:16px;
+    }
+
+    /* Mode berantakan overrides */
+    body.berantakan{
+      --bg:#fffbe6;
+      --card: linear-gradient(135deg,#fff0f0,#fffbe6);
+      --text:#1a1a1a;
+      --muted:#333;
+      --accent:#ff3b3b;
+      --font-size-base:18px;
+    }
+
+    html,body{
+      height:100%;
+      margin:0;
+      font-family:var(--font-family);
+      background:var(--bg);
+      color:var(--text);
+      font-size:var(--font-size-base);
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+      line-height:1.5;
+      transition:background var(--transition), color var(--transition), font-size var(--transition);
+    }
+
+    .container{
+      max-width:1100px;
+      margin:32px auto;
+      padding:20px;
+      box-sizing:border-box;
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:var(--gap);
+    }
+
+    header.card{
+      background:var(--card);
+      padding:20px;
+      border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(16,24,40,0.06);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      transition:all var(--transition);
+    }
+
+    header .titles{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    h1{
+      margin:0;
+      font-size:1.6rem;
+      letter-spacing:0.6px;
+    }
+    h2{
+      margin:0;
+      font-size:1rem;
+      color:var(--muted);
+      font-weight:600;
+    }
+
+    /* Controls */
+    .controls{
+      display:flex;
+      gap:8px;
+      align-items:center;
+    }
+    .switch{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      user-select:none;
+    }
+    .btn{
+      background:var(--accent);
+      color:#fff;
+      border:0;
+      padding:8px 12px;
+      border-radius:10px;
+      cursor:pointer;
+      box-shadow:0 4px 10px rgba(11,110,253,0.15);
+      transition:transform var(--transition), box-shadow var(--transition);
+      font-weight:600;
+    }
+    .btn:active{ transform:translateY(1px); }
+
+    /* layout for content cards */
+    main{
+      display:grid;
+      gap:var(--gap);
+      grid-template-columns:1fr;
+    }
+
+    .card{
+      background:var(--card);
+      padding:18px;
+      border-radius:12px;
+      box-shadow:0 6px 18px rgba(16,24,40,0.04);
+      transition:transform var(--transition), box-shadow var(--transition);
+      overflow:hidden;
+    }
+
+    /* each sub-section */
+    .section{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+
+    .section h3{
+      margin:0;
+      cursor:pointer;
+      padding:8px 10px;
+      border-radius:8px;
+      font-size:1.05rem;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      background:rgba(0,0,0,0.02);
+      transition:background var(--transition), transform var(--transition);
+      user-select:none;
+    }
+
+    .section h3:active{ transform:scale(0.997); }
+    .section h3 .arrow{ font-size:0.85rem; color:var(--muted); margin-left:10px; }
+
+    .answer{
+      padding:10px;
+      border-radius:8px;
+      background:rgba(0,0,0,0.02);
+      transition:max-height var(--transition), opacity var(--transition), transform var(--transition);
+      overflow:hidden;
+    }
+
+    /* Mode rapi vs berantakan styles */
+    body:not(.berantakan) .section h3{ text-align:left; color:var(--text); }
+    body.berantakan .section h3{
+      background:linear-gradient(90deg, rgba(255,240,240,0.6), rgba(255,250,230,0.6));
+      transform: rotate(-0.5deg);
+      color:var(--accent);
+    }
+    body.berantakan .answer{
+      transform:skewX(-2deg);
+      font-size:1.05rem;
+    }
+
+    /* small visual hint for hidden state */
+    .answer[data-hidden="true"]{
+      max-height:0;
+      opacity:0;
+      padding-top:0;
+      padding-bottom:0;
+      margin:0;
+    }
+    .answer[data-hidden="false"]{
+      max-height:2000px; /* large enough */
+      opacity:1;
+    }
+
+    /* footer */
+    footer{
+      text-align:center;
+      font-size:0.9rem;
+      color:var(--muted);
+      padding:8px 0 24px 0;
+    }
+
+    /* RESPONSIVE rules */
+    /* Desktop: >=1024px -> two columns for main content (text + gambar side-by-side example) */
+    @media (min-width:1024px){
+      .container{ padding:28px; }
+      main{ grid-template-columns: 1fr 1fr; align-items:start; }
+      .card.large{
+        grid-column: span 2;
+      }
+    }
+
+    /* Tablet: 600-1023px -> single column with medium text */
+    @media (min-width:600px) and (max-width:1023px){
+      :root{ --font-size-base:17px; }
+      .container{ padding:22px; }
+      main{ grid-template-columns:1fr; }
+    }
+
+    /* Smartphone: <=599px -> single column, larger touch targets */
+    @media (max-width:599px){
+      :root{ --font-size-base:18px; }
+      header{ padding:12px; }
+      .btn{ padding:12px 14px; border-radius:14px; }
+      h1{ font-size:1.35rem; }
+      .section h3{ padding:12px; font-size:1.05rem; }
+      .answer{ padding:12px; }
+      .container{ margin:16px; }
+    }
+
+    /* small helpers */
+    .meta{ font-size:0.95rem; color:var(--muted); }
+    .muted{ color:var(--muted); font-size:0.95rem; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header class="card" role="banner" aria-label="Header laporan">
+      <div class="titles">
+        <h1>LAPORAN PRAKTIKUM</h1>
+        <h2>Hammam Zuhdi Anwar | 202431171</h2>
+        <div class="meta">Mata Kuliah: Contoh Praktikum — Tanggal: 2025-11-02</div>
+      </div>
+
+      <div class="controls" role="region" aria-label="Kontrol tampilan">
+        <div class="switch" title="Ganti mode tampilan">
+          <label for="mode-toggle" class="muted">Mode:</label>
+          <button id="mode-toggle" class="btn" aria-pressed="false">Mode Berantakan</button>
+        </div>
+        <button id="collapse-all" class="btn" title="Sembunyikan semua jawaban">Sembunyikan Semua</button>
+        <button id="expand-all" class="btn" title="Tampilkan semua jawaban">Tampilkan Semua</button>
+      </div>
+    </header>
+
+    <main>
+      <!-- contoh isi: beberapa subbagian (h3) dengan jawaban -->
+      <section class="card section" aria-labelledby="s1">
+        <h3 id="s1">1. Struktur Dasar Halaman
+          <span class="arrow" aria-hidden="true">▾</span>
+        </h3>
+        <div class="answer" data-hidden="false" tabindex="0">
+          <p>Jawaban: Buat satu file HTML, <code>&lt;h1&gt;</code> = LAPORAN PRAKTIKUM, <code>&lt;h2&gt;</code> berisi Nama | NIM, dan beberapa <code>&lt;h3&gt;</code> untuk tiap subbagian yang masing-masing memuat jawaban soal.</p>
+        </div>
+
+        <h3 id="s2">2. Interaktivitas Menggunakan JavaScript
+          <span class="arrow" aria-hidden="true">▾</span>
+        </h3>
+        <div class="answer" data-hidden="false">
+          <p>Jawaban: Ketika user mengklik judul subbagian (<code>h3</code>), tampilkan <code>confirm()</code> yang menanyakan apakah konten ingin disembunyikan. Jika "Ya" maka sembunyikan teks di bawahnya (mengubah atribut <code>data-hidden</code>), jika "Tidak" biarkan tetap tampil. Juga disediakan tombol untuk mengganti mode tampilan antara Rapi dan Berantakan.</p>
+        </div>
+
+        <h3 id="s3">3. Desain Tampilan Menggunakan CSS
+          <span class="arrow" aria-hidden="true">▾</span>
+        </h3>
+        <div class="answer" data-hidden="false">
+          <p>Jawaban: Gunakan Flexbox/Grid untuk mengatur tata letak. Atur warna latar, margin, padding, ukuran teks, dan transisi sederhana. Pilih font sans-serif yang mudah dibaca dan hindari kombinasi warna menyilaukan.</p>
+        </div>
+
+        <h3 id="s4">4. Responsivitas dengan RWD
+          <span class="arrow" aria-hidden="true">▾</span>
+        </h3>
+        <div class="answer" data-hidden="false">
+          <p>Jawaban: Tambahkan media queries:</p>
+          <ul>
+            <li>Desktop (≥1024px): tampilkan dua kolom.</li>
+            <li>Tablet (600–1023px): satu kolom, ukuran teks menengah.</li>
+            <li>Smartphone (≤599px): satu kolom, ukuran teks dan tombol diperbesar untuk mudah disentuh.</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- contoh kartu kedua: gambar / lampiran / ringkasan -->
+      <aside class="card large" aria-label="Ringkasan">
+        <h3 id="s5">Ringkasan / Lampiran
+          <span class="arrow" aria-hidden="true">▾</span>
+        </h3>
+        <div class="answer" data-hidden="false">
+          <p>Contoh ringkasan: Halaman ini adalah implementasi langsung dari kriteria praktikum. Klik judul subbagian untuk coba fitur konfirmasi & sembunyikan. Gunakan tombol "Mode Berantakan" untuk melihat perbedaan gaya.</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer>
+      &copy; 2025 - Contoh Laporan Praktikum — dibuat dengan HTML, CSS, dan JavaScript
+    </footer>
+  </div>
+
+  <script>
+    // Event delegation for h3 clicks
+    (function(){
+      const container = document.querySelector('.container');
+      const body = document.body;
+      const modeBtn = document.getElementById('mode-toggle');
+      const collapseAll = document.getElementById('collapse-all');
+      const expandAll = document.getElementById('expand-all');
+
+      // Helper: find the next .answer sibling after this h3
+      function getAnswerFor(h3){
+        let el = h3.nextElementSibling;
+        // if structure has extra wrappers, adjust here
+        return (el && el.classList.contains('answer')) ? el : null;
+      }
+
+      container.addEventListener('click', function(e){
+        const h3 = e.target.closest('h3');
+        if(!h3) return;
+        // protect clicks on controls
+        if(container.contains(e.target) && e.target.closest('.controls')) return;
+
+        const ans = getAnswerFor(h3);
+        if(!ans) return;
+
+        // Confirm behavior
+        const wantHide = confirm('Apakah Anda ingin menyembunyikan konten bagian ini? Klik "OK" untuk Ya (sembunyikan), "Batal" untuk Tidak.');
+        if(wantHide){
+          ans.setAttribute('data-hidden','true');
+        } else {
+          // leave visible
+          ans.setAttribute('data-hidden','false');
+        }
+      });
+
+      // Mode toggle: toggles class on body
+      modeBtn.addEventListener('click', function(){
+        const isBerantakan = body.classList.toggle('berantakan');
+        modeBtn.textContent = isBerantakan ? 'Mode Rapi' : 'Mode Berantakan';
+        modeBtn.setAttribute('aria-pressed', String(isBerantakan));
+      });
+
+      // Collapse / expand all
+      collapseAll.addEventListener('click', function(){
+        document.querySelectorAll('.answer').forEach(a => a.setAttribute('data-hidden','true'));
+      });
+      expandAll.addEventListener('click', function(){
+        document.querySelectorAll('.answer').forEach(a => a.setAttribute('data-hidden','false'));
+      });
+
+      // Accessibility: allow keyboard Enter/Space on h3 to trigger same confirm
+      container.addEventListener('keydown', function(e){
+        const h3 = e.target.closest('h3');
+        if(!h3) return;
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          const ans = getAnswerFor(h3);
+          if(!ans) return;
+          const wantHide = confirm('Apakah Anda ingin menyembunyikan konten bagian ini? Klik "OK" untuk Ya (sembunyikan), "Batal" untuk Tidak.');
+          if(wantHide) ans.setAttribute('data-hidden','true');
+          else ans.setAttribute('data-hidden','false');
+        }
+      });
+
+      // Initialize: ensure all answers visible
+      document.querySelectorAll('.answer').forEach(a => {
+        if(!a.hasAttribute('data-hidden')) a.setAttribute('data-hidden','false');
+      });
+
+    })();
+  </script>
+</body>
+</html>

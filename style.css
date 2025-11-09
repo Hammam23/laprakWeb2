@@ -1,0 +1,194 @@
+:root {
+  --bg: #fffdf8;
+  --card: #fffaf5;
+  --text: #222;
+  --muted: #555;
+  --accent: #1a27dbff;
+  --radius: 12px;
+  --transition: 250ms ease;
+  --font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ================= BASE ================= */
+body {
+  margin: 0;
+  font-family: var(--font-family);
+  background: var(--bg);
+  color: var(--text);
+}
+
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+/* ================= HEADER ================= */
+header {
+  background: var(--card);
+  border-radius: var(--radius);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+  padding: 20px 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+header .titles {
+  flex: 1 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 700;
+}
+
+h2 {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+/* ================= BUTTONS ================= */
+.controls {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.controls label {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: transform var(--transition), box-shadow var(--transition);
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(255, 64, 64, 0.3);
+}
+
+/* ================= CONTENT ================= */
+.card {
+  background: var(--card);
+  padding: 18px;
+
+  border-radius: var(--radius);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.04);
+  transition: all var(--transition);
+}
+
+main {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+.section h3 {
+  margin: 0;
+  cursor: pointer;
+  padding: 8px 10px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.answer {
+  padding: 10px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.02);
+  transition: max-height var(--transition), opacity var(--transition);
+  overflow: hidden;
+}
+
+.answer[data-hidden="true"] {
+  max-height: 0;
+  opacity: 0;
+  padding: 0;
+  margin: 0;
+}
+
+.answer[data-hidden="false"] {
+  max-height: 1000px;
+  opacity: 1;
+}
+
+/* ================= MODE BERANTAKAN ================= */
+body.berantakan {
+  background: linear-gradient(90deg, #0ef69dff, #dc4c9bff) ;
+  color: #1a1a1a;
+  --card: #e0540dff;
+  font-size: 20px;
+}
+
+body.berantakan .section h3 {
+  background: linear-gradient(90deg, #c7c40bff, #0f077bff);
+  color: var(--accent);
+  
+  transform: rotate(-0.5deg);
+}
+
+/* ================= RESPONSIVE ================= */
+@media (min-width: 1024px) {
+  main {
+    grid-template-columns: 1fr 1fr;
+  }
+  .large {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .controls {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 480px) {
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 1.3rem;
+  }
+}
+
+/* ================= FOOTER ================= */
+footer {
+  text-align: center;
+  margin-top: 30px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
